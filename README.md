@@ -1,215 +1,105 @@
-# Lycoris AI
+# OpenMind AI 🧠
 
-A modern, full-stack AI assistant web application built with Next.js 15+, TypeScript, and Tailwind CSS. Features a clean lavender-accented UI, streaming AI responses via Ollama, conversation persistence with MongoDB, and a complete set of productivity tools.
+OpenMind is a premium, full-stack, local AI assistant and productivity platform built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, and **MongoDB**. 
 
-## Features
+Featuring zero safety filters, a dark-mode styled layout, conversation persistence, and local workflow pipelines, OpenMind brings powerful AI tools straight to your local hardware.
 
-- **Chat with AI** — Streaming token-by-token responses with markdown rendering
-- **Multiple Models** — Dynamic model selection from your local Ollama instance
-- **Deep Research** — Enhanced research mode for thorough analysis
-- **File Management** — Upload, view, and analyze documents (PDF, TXT, DOCX, CSV, images)
-- **Library** — Save and organize prompts, responses, and research
-- **Conversation History** — Search, pin, archive, rename, and manage conversations
-- **Dark & Light Mode** — Beautiful theme switching with system preference support
-- **Responsive Design** — Desktop, tablet, and mobile layouts
-- **Authentication** — Email/password and Google OAuth
-- **Settings** — AI parameters, appearance, privacy controls
+---
 
-## Tech Stack
+## 🚀 Key Features
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Database**: MongoDB + Mongoose
-- **Auth**: NextAuth v5 (Auth.js)
-- **AI Backend**: Ollama (local LLMs)
-- **Icons**: Lucide React
-- **Markdown**: react-markdown + remark-gfm + highlight.js
+*   **💬 Streaming AI Chat** — Token-by-token streaming responses with markdown support, code syntax highlighting, and dynamic context retrieval.
+*   **✨ Advanced Text Humanizer** — A dedicated bypass editor specifically designed to evade academic and corporate AI detectors (such as **Turnitin**, **GPTZero**, and **Copyleaks**).
+    *   **Levels 1-10:** Vary the rewriting strength from light paraphrasing to deep semantic remodeling.
+    *   **SVG Detection Gauge:** Real-time visual feedback showing human-likeness probability score.
+    *   **Comparison Mode:** Highlight changed segments (green highlight) to compare the original and humanized versions side-by-side.
+*   **🎬 ComfyUI Video Generation** — Local API connection to queue Stable Video Diffusion (SVD) workflows on a local ComfyUI instance (defaulting to port `8188`) to generate AI videos.
+*   **📂 Local File RAG** — Upload files (PDF, TXT, DOCX, CSV, images) to index them and chat with your local documents.
+*   **🧠 Fine-Tuning Integration** — Included python script to fine-tune your own local humanizer model on a GPU with Hugging Face datasets (`dmitva/human_ai_generated_text`) and Unsloth.
 
-## Prerequisites
+---
 
-- **Node.js** 18.17 or later
-- **MongoDB** — local instance or [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier)
-- **Ollama** — for running local AI models
+## 🛠️ Tech Stack
 
-## Installation
+*   **Frontend:** Next.js 16 (App Router), React 19, Lucide Icons, React Markdown
+*   **Styling:** Tailwind CSS v4 (Custom dark themes with lavender accent system)
+*   **Database:** MongoDB + Mongoose (conversation & file history metadata)
+*   **Auth:** NextAuth.js v5 (Auth.js)
+*   **AI Engine:** Ollama (Runs local LLMs e.g., Llama 3, Qwen 3, Mistral)
 
-### 1. Clone and install
+---
 
+## 💻 Getting Started
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+*   [Node.js](https://nodejs.org) (v18.17 or later)
+*   [MongoDB](https://www.mongodb.com/try/download/community) (running locally or a remote Atlas connection string)
+*   [Ollama](https://ollama.com) (for loading and running LLMs)
+
+### 2. Installation
 ```bash
-git clone <your-repo-url>
-cd uncensored.ai
+# Clone the repository
+git clone https://github.com/shiridharKhatri/openmind.git
+cd openmind
+
+# Install dependencies
 npm install
 ```
 
-### 2. Set up MongoDB
-
-**Option A: Local MongoDB**
-```bash
-# macOS with Homebrew
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-**Option B: MongoDB Atlas (free tier)**
-1. Go to [mongodb.com/atlas](https://www.mongodb.com/atlas)
-2. Create a free cluster
-3. Get your connection string
-
-### 3. Set up Ollama
-
-```bash
-# Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Or on macOS
-brew install ollama
-
-# Start Ollama
-ollama serve
-
-# Pull a model (in another terminal)
-ollama pull qwen3
-```
-
-You can pull additional models:
-```bash
-ollama pull llama3.2
-ollama pull mistral
-ollama pull codellama
-```
-
-### 4. Configure environment variables
-
+### 3. Set up Environment Variables
+Copy `.env.example` to `.env.local`:
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local`:
+Configure your `.env.local` file:
 ```env
-# Required
-MONGODB_URI=mongodb://localhost:27017/lycoris-ai
-NEXTAUTH_SECRET=your-random-secret-key
+# Database
+MONGODB_URI=mongodb://localhost:27017/openmind
+
+# Authentication
+NEXTAUTH_SECRET=your-random-32-character-secret
 NEXTAUTH_URL=http://localhost:3000
 
-# Ollama
+# Ollama Endpoint
 OLLAMA_BASE_URL=http://localhost:11434
-
-# Optional: Google OAuth
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
-Generate a secure secret:
+### 4. Start the Application
 ```bash
-openssl rand -base64 32
-```
-
-### 5. Run the application
-
-```bash
+# Start development server
 npm run dev
 ```
-
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
+---
 
-```
-src/
-├── app/
-│   ├── (auth)/          # Login, signup pages
-│   ├── (app)/           # Main app with sidebar layout
-│   │   ├── chat/        # Chat pages
-│   │   ├── explore/     # AI capabilities
-│   │   ├── library/     # Saved items
-│   │   ├── files/       # File management
-│   │   ├── history/     # Conversation history
-│   │   ├── settings/    # User settings
-│   │   └── upgrade/     # Plans/pricing
-│   └── api/             # API routes
-│       ├── auth/        # Authentication
-│       ├── chat/        # Streaming chat
-│       ├── conversations/ # CRUD
-│       ├── models/      # Ollama model list
-│       ├── files/       # File upload
-│       └── library/     # Library CRUD
-├── components/
-│   ├── chat/            # Chat UI components
-│   └── layout/          # Sidebar, Header
-├── lib/
-│   ├── ai/              # AI provider abstraction
-│   ├── hooks/           # React hooks
-│   └── models/          # Mongoose schemas
-├── providers/           # React context providers
-└── types/               # TypeScript interfaces
-```
+## 🎯 Model Fine-Tuning (Evasion Training)
 
-## Adding Additional AI Providers
+If you find that standard prompted models are still flagged by Turnitin, you can fine-tune a model parameters-level using our scratch script:
 
-The application uses a provider abstraction pattern:
+1. Copy the training script in [scratch/train_humanizer.py](scratch/train_humanizer.py) to a Google Colab notebook.
+2. Select a **T4 GPU** runtime.
+3. Install the dependencies and run the script to pull the `dmitva/human_ai_generated_text` dataset from Hugging Face and train `Llama-3-8B`.
+4. Download the generated `.gguf` file.
+5. Create a `Modelfile` linking the `.gguf` file:
+   ```dockerfile
+   FROM ./humanizer_model-unsloth.Q4_K_M.gguf
+   TEMPLATE """Below is an AI-generated text. Rewrite it to sound natural, organic, and written by an expert human, bypassing AI detectors.
+   ### AI Text:
+   {{ .Prompt }}
+   ### Humanized Text:
+   """
+   PARAMETER temperature 0.85
+   ```
+6. Build and run it in Ollama:
+   ```bash
+   ollama create humanizer -f ./Modelfile
+   ```
 
-```typescript
-// src/lib/ai/provider.ts
-export function getProvider(name?: string): AIProviderInterface {
-  switch (name) {
-    case 'openai':
-      return new OpenAIProvider();
-    case 'anthropic':
-      return new AnthropicProvider();
-    case 'ollama':
-    default:
-      return new OllamaProvider();
-  }
-}
-```
+---
 
-To add a new provider:
+## 🛡️ License
 
-1. Create `src/lib/ai/your-provider.ts`
-2. Implement the `AIProviderInterface`
-3. Add the case to `getProvider()` in `provider.ts`
-4. Add required API keys to `.env.local`
-
-## Production Deployment
-
-### Build
-```bash
-npm run build
-npm start
-```
-
-### Vercel
-```bash
-npx vercel
-```
-
-Set environment variables in your Vercel dashboard. Note: Ollama must be accessible from your deployment environment.
-
-### Docker
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --production
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Cmd/Ctrl + N` | New chat |
-| `Cmd/Ctrl + K` | Search |
-| `Cmd/Ctrl + Enter` | Send message |
-| `Enter` | Send message |
-| `Shift + Enter` | New line |
-| `Escape` | Close modal/sidebar |
-
-## License
-
-MIT
+This project is licensed under the MIT License - see the LICENSE file for details.
