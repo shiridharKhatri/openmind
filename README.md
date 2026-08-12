@@ -116,6 +116,10 @@ If you find that standard prompted models are still flagged by Turnitin, you can
    ollama create humanizer -f ./Modelfile
    ```
 
+## Contributing
+
+Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) to learn how to help improve OpenMind.
+
 ---
 
 ## License
