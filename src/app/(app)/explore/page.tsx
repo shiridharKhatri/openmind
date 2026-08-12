@@ -58,45 +58,12 @@ const getPromptIcon = (id: string) => {
 export default function ExplorePage() {
   const router = useRouter();
   
-  // Stack statuses
-  const [ollamaStatus, setOllamaStatus] = useState<'checking' | 'online' | 'offline'>('checking');
-  const [ollamaModels, setOllamaModels] = useState<string[]>([]);
-  const [drawThingsStatus, setDrawThingsStatus] = useState<'checking' | 'online' | 'offline'>('checking');
-  const [drawThingsModel, setDrawThingsModel] = useState<string>('');
-  
   // Custom Prompts Manager
   const [prompts, setPrompts] = useState<CustomPrompt[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newPromptName, setNewPromptName] = useState('');
   const [newPromptDesc, setNewPromptDesc] = useState('');
   const [newPromptText, setNewPromptText] = useState('');
-
-  // 1. Poll connection statuses
-  useEffect(() => {
-    // Check Ollama
-    fetch('http://localhost:11434/api/tags')
-      .then(res => res.json())
-      .then(data => {
-        setOllamaStatus('online');
-        if (data.models) {
-          setOllamaModels(data.models.map((m: any) => m.name));
-        }
-      })
-      .catch(() => setOllamaStatus('offline'));
-
-    // Check Draw Things
-    fetch('http://127.0.0.1:7860/sdapi/v1/options')
-      .then(res => res.json())
-      .then(data => {
-        setDrawThingsStatus('online');
-        if (data.sd_model_checkpoint) {
-          setDrawThingsModel(data.sd_model_checkpoint);
-        } else {
-          setDrawThingsModel('Juggernaut XL');
-        }
-      })
-      .catch(() => setDrawThingsStatus('offline'));
-  }, []);
 
   // 2. Load custom prompts and migrate legacy ones
   useEffect(() => {
@@ -176,92 +143,7 @@ export default function ExplorePage() {
           </p>
         </div>
 
-        {/* AI Stack Health Dashboard */}
-        <div className="space-y-4">
-          <h2 className="text-[14px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            AI Service Sockets
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            {/* Ollama status */}
-            <div className="p-5 rounded-2xl border border-[var(--border-color)]/60 bg-[var(--bg-card)]/50 backdrop-blur-md flex flex-col justify-between min-h-[150px]">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="w-10 h-10 rounded-xl bg-lavender-500/10 flex items-center justify-center text-lavender-400">
-                    <Server size={18} />
-                  </span>
-                  <div>
-                    <h3 className="text-[13.5px] font-bold text-[var(--text-primary)]">Ollama LLM Engine</h3>
-                    <p className="text-[11px] text-[var(--text-muted)]">localhost:11434</p>
-                  </div>
-                </div>
-                {ollamaStatus === 'online' ? (
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                    <CheckCircle size={10} /> Online
-                  </span>
-                ) : ollamaStatus === 'offline' ? (
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">
-                    <XCircle size={10} /> Offline
-                  </span>
-                ) : (
-                  <span className="text-[10px] text-[var(--text-muted)] animate-pulse">Checking...</span>
-                )}
-              </div>
 
-              {ollamaStatus === 'online' && ollamaModels.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-[var(--border-color)]/30">
-                  <p className="text-[9.5px] text-[var(--text-muted)] font-bold uppercase tracking-wider mb-2">Loaded Models</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {ollamaModels.map((modelName) => (
-                      <span key={modelName} className="px-2.5 py-1 rounded-lg bg-[var(--bg-hover)] border border-[var(--border-color)]/40 text-[10.5px] font-mono text-[var(--text-secondary)]">
-                        {modelName}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Draw Things status */}
-            <div className="p-5 rounded-2xl border border-[var(--border-color)]/60 bg-[var(--bg-card)]/50 backdrop-blur-md flex flex-col justify-between min-h-[150px]">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400">
-                    <ImageIcon size={18} />
-                  </span>
-                  <div>
-                    <h3 className="text-[13.5px] font-bold text-[var(--text-primary)]">Draw Things API</h3>
-                    <p className="text-[11px] text-[var(--text-muted)]">127.0.0.1:7860</p>
-                  </div>
-                </div>
-                {drawThingsStatus === 'online' ? (
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                    <CheckCircle size={10} /> Online
-                  </span>
-                ) : drawThingsStatus === 'offline' ? (
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">
-                    <XCircle size={10} /> Offline
-                  </span>
-                ) : (
-                  <span className="text-[10px] text-[var(--text-muted)] animate-pulse">Checking...</span>
-                )}
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-[var(--border-color)]/30">
-                <p className="text-[9.5px] text-[var(--text-muted)] font-bold uppercase tracking-wider mb-2">Active Diffusion Pipeline</p>
-                {drawThingsStatus === 'online' ? (
-                  <span className="inline-block px-2.5 py-1 rounded-lg bg-rose-500/5 border border-rose-500/10 text-[10.5px] font-mono text-rose-400">
-                    {drawThingsModel}
-                  </span>
-                ) : (
-                  <span className="text-[11px] text-[var(--text-muted)] font-medium italic">Image generation server is currently offline.</span>
-                )}
-              </div>
-            </div>
-
-          </div>
-        </div>
 
         {/* Custom Prompts Section */}
         <div className="space-y-4 pt-2">
