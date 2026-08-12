@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { use, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChatView } from '@/components/chat/ChatView';
 
@@ -23,11 +23,13 @@ export default function ChatPage({
   };
 
   return (
-    <ChatView
-      conversationId={conversationId}
-      model="qwen3"
-      onConversationCreated={handleConversationCreated}
-      onStreamFinished={handleStreamFinished}
-    />
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center text-zinc-500">Loading Chat...</div>}>
+      <ChatView
+        conversationId={conversationId}
+        model="qwen3"
+        onConversationCreated={handleConversationCreated}
+        onStreamFinished={handleStreamFinished}
+      />
+    </Suspense>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import { WelcomeScreen } from './WelcomeScreen';
 import { MessageList } from './MessageList';
 import { PromptInput } from '@/components/ui/ai-chat-input';
@@ -23,6 +24,9 @@ export function ChatView({
   onStreamFinished,
 }: ChatViewProps) {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
+  const promptParam = searchParams.get('prompt') || '';
+  const hasSentInitialPromptRef = useRef(false);
   const [currentModel, setCurrentModel] = useState(model);
   const [isDeepResearch, setIsDeepResearch] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState('');
@@ -149,6 +153,14 @@ export function ChatView({
 
     loadMessages();
   }, [conversationId, setMessages, isStreaming, error]);
+
+  // Auto-send initial prompt if passed via query parameter
+  useEffect(() => {
+    if (!conversationId && messages.length === 0 && promptParam && !hasSentInitialPromptRef.current && !isStreaming) {
+      hasSentInitialPromptRef.current = true;
+      sendMessage(promptParam);
+    }
+  }, [conversationId, messages, promptParam, sendMessage, isStreaming]);
 
   const handleCopy = async (content: string) => {
     await navigator.clipboard.writeText(content);
