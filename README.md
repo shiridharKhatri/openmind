@@ -1,8 +1,8 @@
-# OpenMind AI
+# OpenMind AI - Local Uncensored AI Assistant
 
-OpenMind is a premium, full-stack, local AI assistant and productivity platform built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and MongoDB. 
+OpenMind is a premium, full-stack, local uncensored AI assistant and productivity platform built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and MongoDB. 
 
-Featuring zero safety filters, a dark-mode styled layout, conversation persistence, and local workflow pipelines, OpenMind brings powerful AI tools straight to your local hardware.
+Featuring zero safety filters, a dark-mode styled layout, conversation persistence, and local workflow pipelines, OpenMind brings powerful, unrestricted AI tools straight to your local hardware.
 
 ---
 
