@@ -34,9 +34,18 @@ export function useChat(options: UseChatOptions = {}): UseChatReturn {
   const [error, setError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const activeConversationIdRef = useRef<string | null>(null);
+  const prevConversationIdRef = useRef<string | null | undefined>(options.conversationId);
 
   // Clear messages and status when conversationId changes (e.g. New chat clicked)
   useEffect(() => {
+    const prevId = prevConversationIdRef.current;
+    prevConversationIdRef.current = options.conversationId;
+
+    // If transitioning between empty IDs (new chat), do not reset or abort
+    if (!prevId && !options.conversationId) {
+      return;
+    }
+
     // If transitioning to the conversation ID we are currently creating/streaming, do not reset!
     if (options.conversationId && options.conversationId === activeConversationIdRef.current) {
       return;

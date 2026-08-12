@@ -17,8 +17,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { messages, model, conversationId, temperature, maxTokens, isDeepResearch, editMessageId, systemPrompt } =
-      await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid or empty request body' }, { status: 400 });
+    }
+
+    const { messages, model, conversationId, temperature, maxTokens, isDeepResearch, editMessageId, systemPrompt } = body;
 
     if (!messages || messages.length === 0) {
       return NextResponse.json({ error: 'Messages are required' }, { status: 400 });
