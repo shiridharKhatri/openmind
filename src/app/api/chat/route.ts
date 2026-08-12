@@ -684,6 +684,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
             }
           } catch {}
         }
+      }
     });
 
     const responseStream = stream.pipeThrough(transformStream);
