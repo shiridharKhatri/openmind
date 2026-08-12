@@ -36,6 +36,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# uploads
+/uploads
+
+# npm cache
+/.npm-cache
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# custom ignores
+AGENTS.md
+CLAUDE.md
+/scratch/
+

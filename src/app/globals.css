@@ -1,26 +1,452 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Explicit reset — Tailwind v4 may not fully apply preflight */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#__next {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* === Lavender Color Palette === */
+  --color-lavender-50: var(--color-lavender-50);
+  --color-lavender-100: var(--color-lavender-100);
+  --color-lavender-200: var(--color-lavender-200);
+  --color-lavender-300: var(--color-lavender-300);
+  --color-lavender-400: var(--color-lavender-400);
+  --color-lavender-500: var(--color-lavender-500);
+  --color-lavender-600: var(--color-lavender-600);
+  --color-lavender-700: var(--color-lavender-700);
+  --color-lavender-800: var(--color-lavender-800);
+  --color-lavender-900: var(--color-lavender-900);
+
+  /* === Neutral Palette === */
+  --color-surface: #FAFAFC;
+  --color-card: #FFFFFF;
+  --color-primary-text: #171717;
+  --color-secondary-text: #77777F;
+  --color-muted-text: #A1A1AA;
+  --color-border: #ECEAF1;
+  --color-hover: #F5F2FA;
+  --color-input-bg: #FFFFFF;
+
+  /* === Dark Mode Overrides === */
+  --color-dark-surface: #0F0F14;
+  --color-dark-card: #1A1A24;
+  --color-dark-card-hover: #222233;
+  --color-dark-border: #2A2A3A;
+  --color-dark-text: #EEEEF0;
+  --color-dark-secondary: #9898A6;
+  --color-dark-muted: #6B6B7A;
+  --color-dark-hover: #1E1E2E;
+
+  /* === Typography === */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* === Radius === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* === Shadows === */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* === Sidebar === */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 0px;
+  --header-height: 56px;
+
+  /* === shadcn/ui Tailwind v4 Color Mappings === */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card-bg: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover-bg: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent-ui: hsl(var(--accent-hsl));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border-ui: hsl(var(--border));
+  --color-input-ui: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* === CSS Custom Properties for Theme === */
+:root {
+  --color-lavender-50: #F7F3FF;
+  --color-lavender-100: #EDE5FF;
+  --color-lavender-200: #DDD0FF;
+  --color-lavender-300: #C4AAFF;
+  --color-lavender-400: #B79AF7;
+  --color-lavender-500: #9B7DE8;
+  --color-lavender-600: #7C5DC9;
+  --color-lavender-700: #6344A9;
+  --color-lavender-800: #4D3487;
+  --color-lavender-900: #3A2768;
+
+  --bg-surface: #FFFFFF;
+  --bg-card: #F9F9F9;
+  --bg-hover: #F0F0F0;
+  --bg-input: #F9F9F9;
+  --bg-sidebar: #F9F9F9;
+  --text-primary: #0D0D0D;
+  --text-secondary: #676767;
+  --text-muted: #B4B4B4;
+  --border-color: #E5E5E5;
+  --accent: #B79AF7;
+  --accent-light: #EDE5FF;
+  --accent-lighter: #F7F3FF;
+  --accent-dark: #9B7DE8;
+  --scrollbar-thumb: #D4D4D8;
+  --scrollbar-track: transparent;
+  --code-bg: #F4F4F5;
+
+  /* shadcn/ui compatible variables (HSL) */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 98%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 264 88% 78%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 20%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
+  --accent-hsl: 264 40% 95%;
+  --accent-foreground: 264 30% 30%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 264 88% 78%;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --bg-surface: #212121;
+  --bg-card: #2F2F2F;
+  --bg-hover: #353535;
+  --bg-input: #242424;
+  --bg-sidebar: #171717;
+  --text-primary: #ECECEC;
+  --text-secondary: #B4B4B4;
+  --text-muted: #676767;
+  --border-color: #3D3D3D;
+  --accent: #B79AF7;
+  --accent-light: #2D2548;
+  --accent-lighter: #1E1A30;
+  --accent-dark: #9B7DE8;
+  --scrollbar-thumb: #424242;
+  --scrollbar-track: transparent;
+  --code-bg: #2F2F2F;
+
+  /* shadcn/ui compatible variables (HSL) */
+  --background: 0 0% 13%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 18%;
+  --card-foreground: 0 0% 93%;
+  --popover: 0 0% 18%;
+  --popover-foreground: 0 0% 93%;
+  --primary: 264 88% 78%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 80%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 60%;
+  --accent-hsl: 0 0% 17%;
+  --accent-foreground: 0 0% 80%;
+  --destructive: 0 63% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --ring: 264 70% 65%;
+}
+
+/* === Base Styles === */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
+
+/* === Scrollbar === */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* === Purple Orb Animation === */
+@keyframes orb-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+@keyframes orb-glow {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes orb-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.orb-container {
+  animation: orb-float 6s ease-in-out infinite;
+}
+
+.orb-glow {
+  animation: orb-glow 4s ease-in-out infinite;
+}
+
+.orb-ring {
+  animation: orb-rotate 20s linear infinite;
+}
+
+/* === Streaming cursor === */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.streaming-cursor::after {
+  content: '▊';
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s ease-in-out infinite;
+  margin-left: 1px;
+  font-size: 0.9em;
+}
+
+/* === Research progress === */
+@keyframes research-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.research-active {
+  animation: research-pulse 2s ease-in-out infinite;
+}
+
+/* === Selection === */
+::selection {
+  background: var(--accent-light);
+  color: var(--text-primary);
+}
+
+/* === Focus ring === */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* === Markdown content === */
+.markdown-content h1 { font-size: 1.5rem; font-weight: 700; margin: 1.5rem 0 0.75rem; }
+.markdown-content h2 { font-size: 1.25rem; font-weight: 600; margin: 1.25rem 0 0.625rem; }
+.markdown-content h3 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+.markdown-content p { margin: 0.5rem 0; line-height: 1.7; }
+.markdown-content ul { margin: 0.5rem 0; padding-left: 1.5rem; list-style-type: disc; }
+.markdown-content ol { margin: 0.5rem 0; padding-left: 1.5rem; list-style-type: decimal; }
+.markdown-content li { margin: 0.25rem 0; line-height: 1.6; }
+.markdown-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.5rem 1rem;
+  margin: 0.75rem 0;
+  background: var(--accent-lighter);
+  border-radius: 0 8px 8px 0;
+}
+.markdown-content a {
+  color: var(--accent-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.markdown-content a:hover {
+  color: var(--accent);
+}
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.875rem;
+}
+.markdown-content th,
+.markdown-content td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+.markdown-content th {
+  background: var(--accent-lighter);
+  font-weight: 600;
+}
+.markdown-content code:not(pre code) {
+  background: var(--code-bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: var(--font-mono);
+}
+.markdown-content pre {
+  margin: 0.75rem 0;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+.markdown-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 1.5rem 0;
+}
+
+/* === Highlight.js theme override === */
+.hljs {
+  background: var(--code-bg) !important;
+  padding: 1rem !important;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+
+
+/* === Animation Keyframes (tailwindcss-animate compatible) === */
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(
+      var(--tw-enter-translate-x, 0),
+      var(--tw-enter-translate-y, 0),
+      0
+    )
+    scale3d(
+      var(--tw-enter-scale, 1),
+      var(--tw-enter-scale, 1),
+      var(--tw-enter-scale, 1)
+    )
+    rotate(var(--tw-enter-rotate, 0));
+  }
+}
+
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(
+      var(--tw-exit-translate-x, 0),
+      var(--tw-exit-translate-y, 0),
+      0
+    )
+    scale3d(
+      var(--tw-exit-scale, 1),
+      var(--tw-exit-scale, 1),
+      var(--tw-exit-scale, 1)
+    )
+    rotate(var(--tw-exit-rotate, 0));
+  }
+}
+
+.animate-in {
+  animation-name: enter;
+  animation-duration: 150ms;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
+}
+
+.animate-out {
+  animation-name: exit;
+  animation-duration: 150ms;
+  --tw-exit-opacity: initial;
+  --tw-exit-scale: initial;
+  --tw-exit-rotate: initial;
+  --tw-exit-translate-x: initial;
+  --tw-exit-translate-y: initial;
+}
+
+.fade-in { --tw-enter-opacity: 0; }
+.fade-in-0 { --tw-enter-opacity: 0; }
+.fade-out { --tw-exit-opacity: 0; }
+.fade-out-0 { --tw-exit-opacity: 0; }
+
+.zoom-in-50 { --tw-enter-scale: 0.5; }
+.zoom-in-75 { --tw-enter-scale: 0.75; }
+.zoom-in-90 { --tw-enter-scale: 0.9; }
+.zoom-in-95 { --tw-enter-scale: 0.95; }
+
+.slide-in-from-top-1 { --tw-enter-translate-y: -0.25rem; }
+.slide-in-from-top-2 { --tw-enter-translate-y: -0.5rem; }
+.slide-in-from-top-3 { --tw-enter-translate-y: -0.75rem; }
+.slide-in-from-bottom-2 { --tw-enter-translate-y: 0.5rem; }
+
+.duration-400 { animation-duration: 400ms; }
