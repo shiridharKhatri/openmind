@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import mammoth from 'mammoth';
-import { PDFParse } from 'pdf-parse';
 
 export async function extractTextFromFile(filePath: string, extension: string): Promise<string> {
   try {
@@ -18,10 +17,10 @@ export async function extractTextFromFile(filePath: string, extension: string): 
 
     if (ext === 'pdf') {
       const buffer = await fs.readFile(filePath);
-      const parser = new PDFParse({ data: buffer });
-      const result = await parser.getText();
-      await parser.destroy();
-      return result.text || '';
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const pdf = require('pdf-parse');
+      const data = await pdf(buffer);
+      return data.text || '';
     }
 
     return '';
