@@ -6,6 +6,53 @@ Featuring zero safety filters, a dark-mode styled layout, conversation persisten
 
 ---
 
+## Simple Setup Guide (For Non-Technical Users)
+
+Follow these 4 simple steps to get OpenMind up and running on your computer.
+
+### Step 1: Install Node.js
+Node.js is the engine that runs the application interface.
+1. Go to the [Node.js Download Page](https://nodejs.org/).
+2. Download the **LTS** version (Recommended for Most Users) for your operating system (Mac or Windows).
+3. Open the downloaded file and follow the standard installation prompts (just click Next/Agree).
+
+### Step 2: Install and Open Ollama
+Ollama is what runs the AI models locally on your computer.
+1. Go to [Ollama.com](https://ollama.com/) and download the application for Mac or Windows.
+2. Install it like any regular application, then open it.
+3. Once running, open your computer's terminal (search for "Terminal" on Mac or "Command Prompt" on Windows) and run this command to download the default model:
+   ```bash
+   ollama pull qwen3
+   ```
+   *(You can also download other models like `ollama pull llama3.2` or your own custom trained models).*
+
+### Step 3: Set up MongoDB (Database)
+MongoDB stores your chat history and files privately on your computer.
+*   **On macOS:** If you have Homebrew installed, open terminal and run:
+    ```bash
+    brew tap mongodb/brew
+    brew install mongodb-community
+    brew services start mongodb-community
+    ```
+*   **On Windows:** Go to the [MongoDB Community Server Download Page](https://www.mongodb.com/try/download/community), download the installer, and follow the setup wizard (make sure "Run service as Network Service user" is checked).
+
+### Step 4: Run the Application
+1. Download this project folder to your computer.
+2. Open your Terminal (Mac) or Command Prompt (Windows).
+3. Type `cd ` (with a space after it) and drag-and-drop the downloaded project folder from your files into the terminal window, then press **Enter**.
+4. Run this command to install the application dependencies:
+   ```bash
+   npm install
+   ```
+5. Copy the `.env.example` file in the folder, rename it to `.env.local`, and save it.
+6. Run this command to start the app:
+   ```bash
+   npm run dev
+   ```
+7. Open your web browser and go to: **[http://localhost:3000](http://localhost:3000)**. You are ready to chat!
+
+---
+
 ## Key Features
 
 *   **Streaming AI Chat** - Token-by-token streaming responses with markdown support, code syntax highlighting, and dynamic context retrieval.
@@ -28,30 +75,9 @@ Featuring zero safety filters, a dark-mode styled layout, conversation persisten
 
 ---
 
-## Getting Started
+## Technical Installation Details
 
-### 1. Prerequisites
-Ensure you have the following installed on your machine:
-*   Node.js (v18.17 or later)
-*   MongoDB (running locally or a remote Atlas connection string)
-*   Ollama (for loading and running LLMs)
-
-### 2. Installation
-```bash
-# Clone the repository
-git clone https://github.com/shiridharKhatri/openmind.git
-cd openmind
-
-# Install dependencies
-npm install
-```
-
-### 3. Set up Environment Variables
-Copy `.env.example` to `.env.local`:
-```bash
-cp .env.example .env.local
-```
-
+### Configure environment variables
 Configure your `.env.local` file:
 ```env
 # Database
@@ -65,13 +91,6 @@ NEXTAUTH_URL=http://localhost:3000
 OLLAMA_BASE_URL=http://localhost:11434
 ```
 
-### 4. Start the Application
-```bash
-# Start development server
-npm run dev
-```
-Open http://localhost:3000 in your browser.
-
 ---
 
 ## Model Fine-Tuning (Evasion Training)
@@ -81,7 +100,7 @@ If you find that standard prompted models are still flagged by Turnitin, you can
 1. Copy the training script in scratch/train_humanizer.py to a Google Colab notebook.
 2. Select a T4 GPU runtime.
 3. Install the dependencies and run the script to pull the dmitva/human_ai_generated_text dataset from Hugging Face and train Llama-3-8B.
-4. Download the generated .gguf` file.
+4. Download the generated .gguf file.
 5. Create a Modelfile linking the .gguf file:
    ```dockerfile
    FROM ./humanizer_model-unsloth.Q4_K_M.gguf
