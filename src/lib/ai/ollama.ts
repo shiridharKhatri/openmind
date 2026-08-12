@@ -38,6 +38,7 @@ export class OllamaProvider implements AIProviderInterface {
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     const encoder = new TextEncoder();
+    let streamBuffer = '';
 
     return new ReadableStream({
       async pull(controller) {
@@ -45,14 +46,30 @@ export class OllamaProvider implements AIProviderInterface {
           const { done, value } = await reader.read();
 
           if (done) {
+            if (streamBuffer.trim()) {
+              try {
+                const json = JSON.parse(streamBuffer);
+                if (json.message?.content || json.message?.thinking || json.done) {
+                  const chunk = JSON.stringify({
+                    content: json.message?.content || '',
+                    thinking: json.message?.thinking || '',
+                    done: true,
+                    model: json.model,
+                  });
+                  controller.enqueue(encoder.encode(chunk + '\n'));
+                }
+              } catch {}
+            }
             controller.close();
             return;
           }
 
-          const text = decoder.decode(value, { stream: true });
-          const lines = text.split('\n').filter(Boolean);
+          streamBuffer += decoder.decode(value, { stream: true });
+          const lines = streamBuffer.split('\n');
+          streamBuffer = lines.pop() || '';
 
           for (const line of lines) {
+            if (!line.trim()) continue;
             try {
               const json = JSON.parse(line);
 

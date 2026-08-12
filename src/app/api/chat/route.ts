@@ -616,12 +616,15 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
 
     // Create a transform stream to accumulate the response
     let fullContent = '';
+    let transformBuffer = '';
     const transformStream = new TransformStream({
       async transform(chunk, controller) {
-        const text = new TextDecoder().decode(chunk);
-        const lines = text.split('\n').filter(Boolean);
+        transformBuffer += new TextDecoder().decode(chunk);
+        const lines = transformBuffer.split('\n');
+        transformBuffer = lines.pop() || '';
 
         for (const line of lines) {
+          if (!line.trim()) continue;
           try {
             const parsed = JSON.parse(line);
             fullContent += parsed.content || '';
@@ -646,23 +649,41 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
                 tokenUsage: parsed.tokenUsage,
               });
 
-              // Update conversation title if it's the first message
-              if (!conversationId) {
-                await Conversation.findByIdAndUpdate(conversation._id, {
-                  updatedAt: new Date(),
-                });
-              } else {
-                await Conversation.findByIdAndUpdate(conversation._id, {
-                  updatedAt: new Date(),
-                });
-              }
+              await Conversation.findByIdAndUpdate(conversation._id, {
+                updatedAt: new Date(),
+              });
             }
           } catch {
-            // Forward raw chunk if not parseable
-            controller.enqueue(chunk);
+            // Ignore incomplete or parsing errors
           }
         }
       },
+      async flush(controller) {
+        if (transformBuffer.trim()) {
+          try {
+            const parsed = JSON.parse(transformBuffer);
+            fullContent += parsed.content || '';
+
+            controller.enqueue(
+              new TextEncoder().encode(
+                JSON.stringify({
+                  ...parsed,
+                  conversationId: conversation._id.toString(),
+                }) + '\n'
+              )
+            );
+
+            if (parsed.done) {
+              await Message.create({
+                conversationId: conversation._id.toString(),
+                role: 'assistant',
+                content: fullContent,
+                modelId: model || 'qwen3:1.7b',
+                tokenUsage: parsed.tokenUsage,
+              });
+            }
+          } catch {}
+        }
     });
 
     const responseStream = stream.pipeThrough(transformStream);
