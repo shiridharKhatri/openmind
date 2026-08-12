@@ -124,8 +124,10 @@ export function ChatView({
   useEffect(() => {
     if (!conversationId) {
       if (!isStreaming && !error) {
-        setMessages([]);
-        lastFetchedIdRef.current = null;
+        if (!promptParam || hasSentInitialPromptRef.current) {
+          setMessages([]);
+          lastFetchedIdRef.current = null;
+        }
       }
       return;
     }
