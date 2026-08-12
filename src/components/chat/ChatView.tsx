@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
 import { WelcomeScreen } from './WelcomeScreen';
 import { MessageList } from './MessageList';
 import { PromptInput } from '@/components/ui/ai-chat-input';
@@ -24,14 +23,24 @@ export function ChatView({
   onStreamFinished,
 }: ChatViewProps) {
   const { data: session } = useSession();
-  const searchParams = useSearchParams();
-  const promptParam = searchParams.get('prompt') || '';
+  const [promptParam, setPromptParam] = useState('');
   const hasSentInitialPromptRef = useRef(false);
   const [currentModel, setCurrentModel] = useState(model);
   const [isDeepResearch, setIsDeepResearch] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState('');
   const [temperature, setTemperature] = useState(0.7);
   const lastFetchedIdRef = useRef<string | null>(null);
+
+  // Parse prompt parameter from URL in a hydration-safe way
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const prompt = params.get('prompt');
+      if (prompt) {
+        setPromptParam(prompt);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setCurrentModel(model);
@@ -156,9 +165,25 @@ export function ChatView({
     loadMessages();
   }, [conversationId, setMessages, isStreaming, error]);
 
+  console.log('ChatView Render:', {
+    conversationId,
+    messagesLength: messages.length,
+    promptParam,
+    hasSentInitialPrompt: hasSentInitialPromptRef.current,
+    isStreaming
+  });
+
   // Auto-send initial prompt if passed via query parameter
   useEffect(() => {
+    console.log('Auto-send useEffect check:', {
+      conversationId,
+      messagesLength: messages.length,
+      promptParam,
+      hasSentInitialPrompt: hasSentInitialPromptRef.current,
+      isStreaming
+    });
     if (!conversationId && messages.length === 0 && promptParam && !hasSentInitialPromptRef.current && !isStreaming) {
+      console.log('Auto-send condition MET! Triggering sendMessage...');
       hasSentInitialPromptRef.current = true;
       sendMessage(promptParam);
     }
