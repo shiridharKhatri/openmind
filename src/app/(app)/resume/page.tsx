@@ -159,6 +159,7 @@ export default function ResumePage() {
   const [data, setData] = useState<ResumeData>(DEMO_DATA);
   const [activeTemplate, setActiveTemplate] = useState<'modern' | 'minimalist' | 'tech' | 'classic' | 'executive' | 'traditional'>('traditional');
   const [zoom, setZoom] = useState<number>(95);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string>('ai');
   const [aiBackground, setAiBackground] = useState<string>('');
   const [aiMode, setAiMode] = useState<'text' | 'portfolio'>('text');
@@ -1051,20 +1052,47 @@ export default function ResumePage() {
         
         {/* Template selector header bar */}
         <div className="px-5 py-3 border-b border-[var(--border-color)]/70 flex items-center justify-between gap-3 bg-[var(--bg-card)]/30 backdrop-blur-md z-10">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-            {(['traditional', 'modern', 'minimalist', 'tech', 'classic', 'executive'] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => setActiveTemplate(t)}
-                className={`px-3.5 py-2 text-[11.5px] font-bold rounded-xl transition-all cursor-pointer shrink-0 border capitalize ${
-                  activeTemplate === t
-                    ? 'bg-lavender-500 text-white border-lavender-500 shadow-sm'
-                    : 'bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] border-[var(--border-color)]'
-                }`}
-              >
-                {t === 'traditional' ? 'Traditional Serif' : t === 'modern' ? 'Modern Elegant' : t === 'minimalist' ? 'Minimalist' : t === 'tech' ? 'Tech Lead' : t === 'classic' ? 'Classic ATS' : 'Executive Chic'}
-              </button>
-            ))}
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center justify-between gap-2 px-3.5 py-2 text-[12px] font-bold rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer transition-all min-w-[170px]"
+            >
+              <span>{
+                activeTemplate === 'traditional' ? 'Traditional Serif' :
+                activeTemplate === 'modern' ? 'Modern Elegant' :
+                activeTemplate === 'minimalist' ? 'Minimalist' :
+                activeTemplate === 'tech' ? 'Tech Lead' :
+                activeTemplate === 'classic' ? 'Classic ATS' :
+                'Executive Chic'
+              }</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {dropdownOpen && (
+              <>
+                {/* Backdrop overlay to close the dropdown on clicking outside */}
+                <div className="fixed inset-0 z-30" onClick={() => setDropdownOpen(false)} />
+                
+                <div className="absolute left-0 mt-1.5 w-[200px] rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-lg py-1.5 z-40">
+                  {(['traditional', 'modern', 'minimalist', 'tech', 'classic', 'executive'] as const).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => {
+                        setActiveTemplate(t);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-[12px] font-bold cursor-pointer transition-colors ${
+                        activeTemplate === t
+                          ? 'bg-lavender-500 text-white'
+                          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      {t === 'traditional' ? 'Traditional Serif' : t === 'modern' ? 'Modern Elegant' : t === 'minimalist' ? 'Minimalist' : t === 'tech' ? 'Tech Lead' : t === 'classic' ? 'Classic ATS' : 'Executive Chic'}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Zoom controls */}
