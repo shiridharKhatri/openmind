@@ -419,38 +419,36 @@ export default function ResumePage() {
       {/* LEFT COLUMN: Input Form Panel */}
       <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col h-full border-r border-[var(--border-color)] bg-[var(--bg-sidebar)] overflow-hidden">
         {/* Header Controls */}
-        <div className="px-5 py-4 border-b border-[var(--border-color)]/70 flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div>
-                <h1 className="text-[14.5px] font-bold tracking-tight text-[var(--text-primary)]">Resume Builder</h1>
-                <p className="text-[11px] text-[var(--text-muted)] font-medium">Create or AI-generate resumes</p>
-              </div>
-            </div>
-            <button
-              onClick={handlePrintDownload}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-[11.5px] font-bold text-white bg-lavender-500 hover:bg-lavender-600 rounded-xl transition-all duration-200 shadow-sm cursor-pointer hover:shadow-md active:scale-98"
-            >
-              <Download size={13} />
-              <span>Download PDF</span>
-            </button>
+        <div className="px-5 py-4 border-b border-[var(--border-color)]/30 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-[15px] font-extrabold tracking-tight text-[var(--text-primary)]">Resume Builder</h1>
+            <p className="text-[11px] text-[var(--text-muted)] font-medium">Create or AI-generate resumes</p>
           </div>
 
-          {/* Import/Export/Reset buttons row */}
-          <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-[var(--border-color)]/40 mt-1">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-red-500/10 hover:bg-red-500/10 text-red-500 transition-colors cursor-pointer"
+              title="Reset data fields"
+            >
+              <RefreshCw size={11} />
+              <span>Clear</span>
+            </button>
             <button
               onClick={handleExportJSON}
-              className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-bold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              title="Export resume data to JSON file"
             >
               <Download size={11} />
-              <span>Export JSON</span>
+              <span>Export</span>
             </button>
             <button
               onClick={handleImportJSONClick}
-              className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-bold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              title="Import resume data from JSON file"
             >
               <Upload size={11} />
-              <span>Import JSON</span>
+              <span>Import</span>
             </button>
             <input
               type="file"
@@ -460,12 +458,10 @@ export default function ResumePage() {
               className="hidden"
             />
             <button
-              onClick={handleReset}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold rounded-lg border border-red-200/20 hover:bg-red-500/10 text-red-500 transition-colors ml-auto cursor-pointer"
-              title="Reset data fields"
+              onClick={handlePrintDownload}
+              className="flex items-center gap-1 px-3.5 py-1.5 text-[11.5px] font-bold text-white bg-lavender-500 hover:bg-lavender-655 rounded-lg transition-all shadow-sm cursor-pointer hover:shadow"
             >
-              <RefreshCw size={11} />
-              <span>Clear</span>
+              <span>Download PDF</span>
             </button>
           </div>
         </div>
