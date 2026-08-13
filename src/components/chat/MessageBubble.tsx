@@ -210,6 +210,8 @@ export function MessageBubble({
             }
 
             const filteredMatches = formattedMatches.filter(url => {
+              const lowerUrl = url.toLowerCase();
+              if (lowerUrl.includes('example.com')) return false;
               return !imageUrls.some(imgUrl => imgUrl.includes(url) || url.includes(imgUrl));
             });
 
