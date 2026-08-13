@@ -60,6 +60,12 @@ MongoDB stores your chat history and files privately on your computer.
     *   **Levels 1-10:** Vary the rewriting strength from light paraphrasing to deep semantic remodeling.
     *   **SVG Detection Gauge:** Real-time visual feedback showing human-likeness probability score.
     *   **Comparison Mode:** Highlight changed segments (green highlight) to compare the original and humanized versions side-by-side.
+*   **AI Career Suite** - A dedicated workspace containing 5 advanced career tools synchronized dynamically using `localStorage` data state:
+    *   **Resume Builder:** Create resumes using detailed visual form inputs or auto-generate them using AI text prompts and portfolio website scrapers. Supports multiple elegant themes (Traditional Serif, Modern Elegant, Minimalist, Tech Lead, Classic ATS, Executive Chic) with document zoom and print-to-PDF formatting.
+    *   **ATS Scorer & Optimizer:** Run compatibility checks by scanning your resume against target job descriptions to get compatibility match scores, list missing keywords, and view actionable suggestions.
+    *   **Cover Letter Generator:** Instantly draft targeted cover letters based on your profile, formatted inside clean print-ready templates.
+    *   **Interview Prep Simulator:** Practice technical and behavioral questions in a mock HR recruiter chat panel and receive real-time coaching tips.
+    *   **Cold Outreach Writer:** Compose high-response LinkedIn connection requests, recruiter pitches, and cold email templates.
 *   **ComfyUI Video Generation** - Local API connection to queue Stable Video Diffusion (SVD) workflows on a local ComfyUI instance (defaulting to port 8188) to generate AI videos.
 *   **Local File RAG** - Upload files (PDF, TXT, DOCX, CSV, images) to index them and chat with your local documents.
 *   **Fine-Tuning Integration** - Included python script to fine-tune your own local humanizer model on a GPU with Hugging Face datasets (dmitva/human_ai_generated_text) and Unsloth.
