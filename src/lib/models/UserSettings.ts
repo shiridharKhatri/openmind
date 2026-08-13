@@ -16,7 +16,7 @@ const UserSettingsSchema = new Schema<IUserSettingsDoc>(
   {
     userId: { type: String, required: true, unique: true },
     theme: { type: String, enum: ['light', 'dark', 'system'], default: 'system' },
-    defaultModel: { type: String, default: 'qwen3:1.7b' },
+    defaultModel: { type: String, default: 'openmind:latest' },
     temperature: { type: Number, default: 0.7, min: 0, max: 2 },
     maxTokens: { type: Number, default: 4096 },
     systemInstructions: { type: String, default: '' },

@@ -94,7 +94,7 @@ export function useChat(options: UseChatOptions = {}): UseChatReturn {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             messages: allMessages,
-            model: modelOverride || options.model || 'qwen3:1.7b',
+            model: modelOverride || options.model || 'openmind:latest',
             conversationId: options.conversationId,
             temperature: options.temperature,
             maxTokens: options.maxTokens,
@@ -266,7 +266,7 @@ export function useChat(options: UseChatOptions = {}): UseChatReturn {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             messages: allMessages,
-            model: options.model || 'qwen3:1.7b',
+            model: options.model || 'openmind:latest',
             conversationId: options.conversationId,
             temperature: options.temperature,
             maxTokens: options.maxTokens,

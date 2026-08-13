@@ -17,7 +17,7 @@ export function WelcomeScreen({
 }: WelcomeScreenProps) {
   const { models: fetchedModels } = useModels();
   const availableModelNames = fetchedModels.map((m) => m.id).filter(Boolean);
-  const modelList = availableModelNames.length > 0 ? availableModelNames : ['qwen3:1.7b'];
+  const modelList = availableModelNames.length > 0 ? availableModelNames : ['openmind:latest'];
 
   const handleSubmit = (
     value: string,

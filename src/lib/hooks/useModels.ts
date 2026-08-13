@@ -7,7 +7,7 @@ export function useModels() {
   const [models, setModels] = useState<AIModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [available, setAvailable] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<string>('qwen3:1.7b');
+  const [selectedModel, setSelectedModel] = useState<string>('openmind:latest');
 
   const fetchModels = useCallback(async () => {
     try {

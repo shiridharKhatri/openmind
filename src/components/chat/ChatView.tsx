@@ -8,6 +8,7 @@ import { PromptInput } from '@/components/ui/ai-chat-input';
 import { useChat } from '@/lib/hooks/useChat';
 import { useModels } from '@/lib/hooks/useModels';
 import { IMessage } from '@/types';
+import { useConversationsContext } from '@/providers/ConversationsProvider';
 
 interface ChatViewProps {
   conversationId: string | null;
@@ -23,13 +24,18 @@ export function ChatView({
   onStreamFinished,
 }: ChatViewProps) {
   const { data: session } = useSession();
+  const { selectedModel, setSelectedModel } = useConversationsContext();
   const [promptParam, setPromptParam] = useState('');
   const hasSentInitialPromptRef = useRef(false);
-  const [currentModel, setCurrentModel] = useState(model);
+  const [currentModel, setCurrentModel] = useState(selectedModel);
   const [isDeepResearch, setIsDeepResearch] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState('');
   const [temperature, setTemperature] = useState(0.7);
   const lastFetchedIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    setCurrentModel(selectedModel);
+  }, [selectedModel]);
 
   // Parse prompt parameter from URL in a hydration-safe way
   useEffect(() => {
@@ -42,9 +48,7 @@ export function ChatView({
     }
   }, []);
 
-  useEffect(() => {
-    setCurrentModel(model);
-  }, [model]);
+
 
   const handleConversationCreatedInternal = (newId: string) => {
     lastFetchedIdRef.current = newId;
@@ -75,7 +79,7 @@ export function ChatView({
         'When listing multiple website links, you MUST ALWAYS output them as a vertical bulleted list (using points like "- [Site Name](URL)"), never comma-separated in a single line. ' +
         'You are running locally on the user\'s own private hardware.'
       );
-            
+
       // User profile context
       const profileParts: string[] = [];
       if (savedNickname) profileParts.push(`Their name/nickname is "${savedNickname}". Address them by this name naturally.`);
@@ -154,6 +158,7 @@ export function ChatView({
           setMessages(data.messages || []);
           if (data.conversation?.modelId) {
             setCurrentModel(data.conversation.modelId);
+            setSelectedModel(data.conversation.modelId);
           }
           lastFetchedIdRef.current = conversationId;
         }
@@ -163,7 +168,7 @@ export function ChatView({
     };
 
     loadMessages();
-  }, [conversationId, setMessages, isStreaming, error]);
+  }, [conversationId, setMessages, isStreaming, error, setSelectedModel]);
 
   console.log('ChatView Render:', {
     conversationId,
@@ -203,7 +208,7 @@ export function ChatView({
 
   const { models: fetchedModels } = useModels();
   const availableModelNames = fetchedModels.map((m) => m.id).filter(Boolean);
-  const modelList = availableModelNames.length > 0 ? availableModelNames : ['qwen3:1.7b'];
+  const modelList = availableModelNames.length > 0 ? availableModelNames : ['openmind:latest'];
 
   const autoSelectModel = (text: string, availableModels: string[]): string => {
     // Default to the uncensored models to prevent any censorship frustrations
@@ -211,23 +216,23 @@ export function ChatView({
     for (const model of preferred) {
       if (availableModels.includes(model)) return model;
     }
-    const found = availableModels.find(m => 
-      m.toLowerCase().includes('dolphin') || 
-      m.toLowerCase().includes('uncensored') || 
+    const found = availableModels.find(m =>
+      m.toLowerCase().includes('dolphin') ||
+      m.toLowerCase().includes('uncensored') ||
       m.toLowerCase().includes('openmind')
     );
     if (found) return found;
 
-    return availableModels.includes('qwen3:1.7b') ? 'qwen3:1.7b' : (availableModels[0] || 'qwen3:1.7b');
+    return availableModels.includes('openmind:latest') ? 'openmind:latest' : (availableModels[0] || 'openmind:latest');
   };
 
   const handleSubmit = (
     value: string,
     meta: { model: string; effort: string; attachments: File[] }
   ) => {
-    const dynamicModel = autoSelectModel(value, modelList);
-    setCurrentModel(dynamicModel);
-    sendMessage(value, dynamicModel);
+    const activeModel = selectedModel || autoSelectModel(value, modelList);
+    setCurrentModel(activeModel);
+    sendMessage(value, activeModel);
   };
 
   const userName = session?.user?.name?.split(' ')[0] || 'there';
@@ -238,9 +243,9 @@ export function ChatView({
       <WelcomeScreen
         userName={userName}
         onSend={(val) => {
-          const dynamicModel = autoSelectModel(val, modelList);
-          setCurrentModel(dynamicModel);
-          sendMessage(val, dynamicModel);
+          const activeModel = selectedModel || autoSelectModel(val, modelList);
+          setCurrentModel(activeModel);
+          sendMessage(val, activeModel);
         }}
       />
     );

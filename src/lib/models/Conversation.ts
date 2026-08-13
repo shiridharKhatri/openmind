@@ -14,7 +14,7 @@ const ConversationSchema = new Schema<IConversationDoc>(
   {
     userId: { type: String, required: true, index: true },
     title: { type: String, default: 'New conversation' },
-    modelId: { type: String, default: 'qwen3:1.7b' },
+    modelId: { type: String, default: 'openmind:latest' },
     archived: { type: Boolean, default: false },
     pinned: { type: Boolean, default: false },
   },

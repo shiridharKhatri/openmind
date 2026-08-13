@@ -16,7 +16,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('qwen3:1.7b');
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -159,8 +158,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {/* Header */}
           {pathname.startsWith('/chat') && (
             <Header
-              selectedModel={selectedModel}
-              onModelChange={setSelectedModel}
               sidebarOpen={sidebarOpen}
             />
           )}

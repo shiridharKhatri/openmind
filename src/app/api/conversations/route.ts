@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     const conversation = await Conversation.create({
       userId: session.user.id,
       title: title || 'New conversation',
-      modelId: model || 'qwen3:1.7b',
+      modelId: model || 'openmind:latest',
     });
 
     return NextResponse.json({ conversation }, { status: 201 });

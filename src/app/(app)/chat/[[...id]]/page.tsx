@@ -26,7 +26,7 @@ export default function ChatPage({
     <Suspense fallback={<div className="flex-1 flex items-center justify-center text-zinc-500">Loading Chat...</div>}>
       <ChatView
         conversationId={conversationId}
-        model="qwen3"
+        model="openmind:latest"
         onConversationCreated={handleConversationCreated}
         onStreamFinished={handleStreamFinished}
       />

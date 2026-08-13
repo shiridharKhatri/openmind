@@ -11,6 +11,8 @@ interface ConversationsContextType {
   createConversation: (title?: string, model?: string) => Promise<IConversation | null>;
   deleteConversation: (id: string) => Promise<void>;
   updateConversation: (id: string, updates: Partial<IConversation>) => Promise<IConversation | null>;
+  selectedModel: string;
+  setSelectedModel: (model: string) => void;
 }
 
 const ConversationsContext = createContext<ConversationsContextType | undefined>(undefined);
@@ -19,6 +21,24 @@ export function ConversationsProvider({ children }: { children: React.ReactNode 
   const [conversations, setConversations] = useState<IConversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string>('openmind:latest');
+
+  // Load selected model from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('om_selected_model');
+      if (saved) {
+        setSelectedModel(saved);
+      }
+    }
+  }, []);
+
+  const handleSetSelectedModel = useCallback((model: string) => {
+    setSelectedModel(model);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('om_selected_model', model);
+    }
+  }, []);
 
   const fetchConversations = useCallback(async (search?: string) => {
     try {
@@ -102,6 +122,8 @@ export function ConversationsProvider({ children }: { children: React.ReactNode 
         createConversation,
         deleteConversation,
         updateConversation,
+        selectedModel,
+        setSelectedModel: handleSetSelectedModel,
       }}
     >
       {children}

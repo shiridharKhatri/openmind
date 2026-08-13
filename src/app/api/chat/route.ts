@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
         conversation = await Conversation.create({
           userId: session.user.id,
           title: `Video: ${prompt.substring(0, 30)}`,
-          modelId: model || 'qwen3:1.7b',
+          modelId: model || 'openmind:latest',
         });
       }
 
@@ -369,7 +369,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
         conversation = await Conversation.create({
           userId: session.user.id,
           title: `Image: ${prompt.substring(0, 30)}`,
-          modelId: model || 'qwen3:1.7b',
+          modelId: model || 'openmind:latest',
         });
       }
 
@@ -564,7 +564,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
 
     // Call the provider first to ensure connection is successful before saving to DB
     const stream = await provider.chat({
-      model: model || 'qwen3:1.7b',
+      model: model || 'openmind:latest',
       messages: aiMessages,
       temperature: temperature ?? 0.7,
       maxTokens: maxTokens ?? 4096,
@@ -585,7 +585,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
       conversation = await Conversation.create({
         userId: session.user.id,
         title: generateTitle(messages[messages.length - 1].content),
-        modelId: model || 'qwen3:1.7b',
+        modelId: model || 'openmind:latest',
       });
     }
 
@@ -645,7 +645,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
                 conversationId: conversation._id.toString(),
                 role: 'assistant',
                 content: fullContent,
-                modelId: model || 'qwen3:1.7b',
+                modelId: model || 'openmind:latest',
                 tokenUsage: parsed.tokenUsage,
               });
 
@@ -678,7 +678,7 @@ Once ComfyUI is open, type your video prompts directly here in **OpenMind** (e.g
                 conversationId: conversation._id.toString(),
                 role: 'assistant',
                 content: fullContent,
-                modelId: model || 'qwen3:1.7b',
+                modelId: model || 'openmind:latest',
                 tokenUsage: parsed.tokenUsage,
               });
             }

@@ -38,7 +38,7 @@ export default function SettingsPage() {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
   const [activeSection, setActiveSection] = useState('account');
-  const [defaultModel, setDefaultModel] = useState('qwen3:1.7b');
+  const [defaultModel, setDefaultModel] = useState('openmind:latest');
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(4096);
   const [systemInstructions, setSystemInstructions] = useState('');
