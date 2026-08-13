@@ -428,27 +428,24 @@ export default function ResumePage() {
           <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={handleReset}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-red-500/10 hover:bg-red-500/10 text-red-500 transition-colors cursor-pointer"
-              title="Reset data fields"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-red-500/10 hover:bg-red-500/10 text-red-500 transition-colors cursor-pointer"
+              title="Clear all fields"
             >
-              <RefreshCw size={11} />
-              <span>Clear</span>
+              <RefreshCw size={12} />
             </button>
             <button
               onClick={handleExportJSON}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
-              title="Export resume data to JSON file"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              title="Export JSON data"
             >
-              <Download size={11} />
-              <span>Export</span>
+              <Download size={12} />
             </button>
             <button
               onClick={handleImportJSONClick}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
-              title="Import resume data from JSON file"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all cursor-pointer"
+              title="Import JSON data"
             >
-              <Upload size={11} />
-              <span>Import</span>
+              <Upload size={12} />
             </button>
             <input
               type="file"
@@ -459,7 +456,7 @@ export default function ResumePage() {
             />
             <button
               onClick={handlePrintDownload}
-              className="flex items-center gap-1 px-3.5 py-1.5 text-[11.5px] font-bold text-white bg-lavender-500 hover:bg-lavender-655 rounded-lg transition-all shadow-sm cursor-pointer hover:shadow"
+              className="flex items-center gap-1 px-3 py-1.5 text-[11.5px] font-bold text-white bg-lavender-500 hover:bg-lavender-655 rounded-lg transition-all shadow-sm cursor-pointer hover:shadow shrink-0"
             >
               <span>Download PDF</span>
             </button>
