@@ -25,6 +25,11 @@ import {
   Sparkles,
   SlidersHorizontal,
   ChevronsUpDown,
+  FileText,
+  CheckSquare,
+  Mail,
+  MessageSquare,
+  Send,
 } from 'lucide-react';
 import { cn, truncate, formatDate } from '@/lib/utils';
 import { useConversations } from '@/lib/hooks/useConversations';
@@ -43,6 +48,11 @@ interface SidebarProps {
 
 const navItems = [
   { icon: Compass, label: 'Explore', href: '/explore' },
+  { icon: FileText, label: 'Resume Builder', href: '/resume' },
+  { icon: CheckSquare, label: 'ATS Scorer', href: '/ats' },
+  { icon: Mail, label: 'Cover Letter', href: '/cover-letter' },
+  { icon: MessageSquare, label: 'Interview Prep', href: '/interview' },
+  { icon: Send, label: 'Cold Outreach', href: '/outreach' },
   { icon: Sparkles, label: 'Humanizer', href: '/humanizer' },
   { icon: BookOpen, label: 'Library', href: '/library' },
   { icon: FolderOpen, label: 'Files', href: '/files' },
