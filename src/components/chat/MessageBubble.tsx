@@ -122,7 +122,7 @@ export function MessageBubble({
             >
               {message.content}
             </div>
-            
+
             {/* User message actions */}
             {!isStreaming && (
               <div
@@ -186,7 +186,7 @@ export function MessageBubble({
           {!isStreaming && (() => {
             const urlRegex = /(https?:\/\/[^\s)\],<>"\*]+|www\.[^\s)\],<>"\*]+|\b[a-zA-Z0-9-]+\.(?:com|net|org|edu|gov|mil|co|io|tv|cc|xyz|info|biz)(?:\/[^\s)\],<>"\*]*)?\b)/gi;
             const matches = message.content.match(urlRegex) || [];
-            
+
             // Format matched domains to have a proper protocol prefix
             const formattedMatches = matches.map(url => {
               if (url.toLowerCase().startsWith('http://') || url.toLowerCase().startsWith('https://')) {
@@ -216,9 +216,9 @@ export function MessageBubble({
             });
 
             const uniqueUrls = Array.from(new Set(filteredMatches));
-            
+
             if (uniqueUrls.length === 0) return null;
-            
+
             return (
               <div className="mt-3 flex flex-col gap-2">
                 {uniqueUrls.map((url) => (
@@ -290,7 +290,7 @@ export function MessageBubble({
               >
                 {shared ? <Check size={14} className="text-green-500" /> : <Share2 size={14} />}
               </button>
-              
+
               <div className="relative" ref={moreMenuRef}>
                 <button
                   onClick={() => setShowMoreMenu(!showMoreMenu)}
